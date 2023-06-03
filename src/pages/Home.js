@@ -3,6 +3,7 @@ import CardsTour from "../components/CardsTour"
 import CardComponents from "../components/Cards"
 import FooterComponents from "../components/Footer"
 import ListTransactionAdmins from "../components/Admin/ListTransactionAdmin"
+import { Link } from "react-router-dom"
 
 
 function Home({isAdmin}) {
@@ -11,7 +12,6 @@ function Home({isAdmin}) {
         <div>
             {isAdmin?  (<ListTransactionAdmins />) : (
             <div>
-
                 <NavbarComponents />
                 <CardComponents />
                 <CardsTour />

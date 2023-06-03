@@ -1,94 +1,285 @@
-import React from 'react'
-import { Button, Container } from 'react-bootstrap'
-import Col from 'react-bootstrap/Col';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import React, { useEffect, useState } from 'react';
+import { Button, Container, FormGroup, FormLabel } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
+import { Link, useNavigate } from 'react-router-dom';
+import { API } from '../config/api';
+import { useMutation } from 'react-query';
+import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Link } from 'react-router-dom';
-
-
 
 function AddTrips() {
-  return (
-    <>
-        <Container>
-            <Form>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Title Trip</Form.Label>
-                    <Form.Control className='bg-secondary'  type="email"  />
-                </Form.Group>
-                <Form.Label className='mt-3'>Country</Form.Label>
-                <Form.Select className='bg-secondary' aria-label="Default select example">
-                <Form.Label ></Form.Label>
-                    <option>Country</option>
-                    <option value="1">Indonesia</option>
-                    <option value="2">Germany</option>
-                    <option value="3">Thailand</option>
-                </Form.Select>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Accommodation</Form.Label>
-                    <Form.Control className='bg-secondary' type="email"  />
-                </Form.Group>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Transportation</Form.Label>
-                    <Form.Control className='bg-secondary' type="email"  />
-                </Form.Group>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Edit</Form.Label>
-                    <Form.Control className='bg-secondary' type="text"  />
-                </Form.Group>
-                <Row className="g-2">
-                <Form.Label className='mt-3'>Edit</Form.Label>
-                    <Col md>
-                        <FloatingLabel controlId="floatingInputGrid" label="Email address">
-                        <Form.Control type="email"  />
-                        </FloatingLabel>
-                    </Col>
-                    <Col md>
-                        <FloatingLabel
-                        controlId="floatingSelectGrid"
-                        label="Works with selects"
+    let navigate = useNavigate();
+
+    const [countries, setCountries] = useState([]);
+    const [preview, setPreview] = useState(null);
+    const [form, setForm] = useState({
+        title: '',
+        accomodation: '',
+        transportation: '',
+        eat: '',
+        day: '',
+        night: '',
+        date_trip: '',
+        price: '',
+        quota: '',
+        description: '',
+        image: '',
+        country_id: '',
+    });
+    console.log(form);
+
+
+
+    // Fetching Country data
+    const getCountries = async () => {
+        try {
+            const response = await API.get('/countries');
+            setCountries(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Handle if countries selected
+    // const handleChangeCountryId = (e) => {
+    //     const id = e.target.value;
+    //     const checked = e.target.checked;
+
+    //     if (checked) {
+    //         setForm({ ...form, country_id: [...form.country_id, id] });
+    //     } else {
+    //         let newCountryId = form.country_id.filter((countryId) => {
+    //             return countryId !== id;
+    //         });
+
+    //         setForm({ ...form, country_id: newCountryId });
+    //     }
+    // };
+
+    // Handle change data on form
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]:
+                e.target.type === 'file' ? e.target.files : e.target.value,
+        });
+
+        if (e.target.type === 'file') {
+            let url = URL.createObjectURL(e.target.files[0]);
+            setPreview(url);
+        }
+    };
+
+    const handleSubmit = useMutation(async (e) => { 
+        try {
+            e.preventDefault();
+
+            const config = {
+                headers: {
+                    'Content-type': 'multipart/form-data',  
+                    'Authorization': `Bearer ${localStorage.token}` 
+                },
+            };
+
+            const formData = new FormData();
+            formData.set('title', form.title);
+            formData.set('accomodation', form.accomodation);
+            formData.set('transportation', form.transportation);
+            formData.set('eat', form.eat);
+            formData.set('day', form.day);
+            formData.set('night', form.night);
+            formData.set('date_trip', form.date_trip);
+            formData.set('price', form.price);
+            formData.set('quota', form.quota);
+            formData.set('description', form.description);
+            formData.set('image', form.image[0], form.image[0].name);
+            // let country_id = form.country_id.map((countryId) =>
+            //     Number(countryId)
+            // );
+            formData.set('country_id', form.country_id);
+            console.log(formData.getAll('country_id'))
+
+            const response = await API.post('/trip', formData, config);
+            console.log('add trip success : ', response);
+
+            navigate('/incometrips');
+        } catch (error) {
+            console.log('add trip failed : ', error);
+        }
+    });
+
+    useEffect(() => {
+        getCountries();
+    }, []);
+
+    return (
+        <>
+            <Container>
+                <Form onSubmit={(e) => handleSubmit.mutate(e)}>
+                    <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>Title Trip</Form.Label>
+                        <Form.Control
+                            name="title"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formCountry" className="mt-3">
+                        <Form.Label>Country</Form.Label>
+                        <Form.Control
+                            as="select"
+                            name="country_id"
+                            // onChange={handleChangeCountryId}
+                            onChange={handleChange}
+                            className="bg-secondary"
                         >
-                        <Form.Select className='bg-secondary' aria-label="Floating label select example">
-                            <option>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </Form.Select>
-                        </FloatingLabel>
-                    </Col>
-                </Row>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Date Trip</Form.Label>
-                    <Form.Control className='bg-secondary' type="text"  />
-                </Form.Group>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Price</Form.Label>
-                    <Form.Control className='bg-secondary' type="text"  />
-                </Form.Group>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>Quota</Form.Label>
-                    <Form.Control className='bg-secondary' type="text"  />
-                </Form.Group>
-                <Form.Group className="mt-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control className='bg-secondary' as="textarea" rows={3} />
-                </Form.Group>
-                <Form.Group controlId="formFile" className="mt-3 ">
-                    <Form.Label >Default file input example</Form.Label>
-                    <Form.Control className='bg-secondary' type="file" />
-                </Form.Group>
-                <Form.Group  controlId="formFile" className="mt-3">
-                    <Link to={"/IncomeTrips"}>
-                        <Button  className='mt=3'>Add Trip</Button>
-                    </Link> 
-                </Form.Group>
-            </Form>
-            
-        </Container>
-    
-    </>
-  )
+                            <option value="">Select a country</option>
+                            {countries.map((item, index) => (
+                                <option key={item.id} value={item.id}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </Form.Control>
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlInput1"
+                    >
+                        <Form.Label>Accommodation</Form.Label>
+                        <Form.Control
+                            name="accomodation"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlInput1"
+                    >
+                        <Form.Label>Transportation</Form.Label>
+                        <Form.Control
+                            name="transportation"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlInput1"
+                    >
+                        <Form.Label>Eat</Form.Label>
+                        <Form.Control
+                            name="eat"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group as={Row} className="mt-4" controlId="formPlaintextPassword">
+                        <Form.Label column sm="1">
+                            Day
+                        </Form.Label>
+
+                        <Col sm="2">
+                            <Form.Control
+                                className="bg-secondary"
+                                type="text"
+                                onChange={handleChange}
+                                name='day'
+                                />
+                        </Col>
+                        <Form.Label column sm="1">
+                            Night
+                        </Form.Label>
+                        <Col sm="2">
+                            <Form.Control
+                                className="bg-secondary"
+                                type="text" 
+                                name='night'
+                                onChange={handleChange}
+                                />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlInput1"
+                    >
+                        <Form.Label>Date Trip</Form.Label>
+                        <Form.Control
+                            name="date_trip"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlInput1"
+                    >
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control
+                            name="price"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlInput1"
+                    >
+                        <Form.Label>Quota</Form.Label>
+                        <Form.Control
+                            name="quota"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            type="text"
+                        />
+                    </Form.Group>
+                    <Form.Group
+                        className="mt-3"
+                        controlId="exampleForm.ControlTextarea1"
+                    >
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control
+                            name="description"
+                            onChange={handleChange}
+                            className="bg-secondary"
+                            as="textarea"
+                            rows={3}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formFile" className="mt-3 ">
+                        <Form.Control
+                            name="image"
+                            className="bg-secondary"
+                            type="file"
+                            onChange={handleChange}
+                        />
+                        {preview && (
+                            <img
+                                src={preview}
+                                style={{
+                                    maxWidth: '150px',
+                                    maxHeight: '150px',
+                                    objectFit: 'cover',
+                                }}
+                                alt={preview}
+                            />
+                        )}
+                    </Form.Group>
+                    <Form.Group controlId="formFile" className="mt-3">
+                        <Button type="submit" className="mt=3">
+                            Add Trip
+                        </Button>
+                    </Form.Group>
+                </Form>
+            </Container>
+        </>
+    );
 }
 
-export default AddTrips
+export default AddTrips;

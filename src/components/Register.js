@@ -3,14 +3,14 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { Alert, FormGroup } from "react-bootstrap";
-import {API} from '../config/api'
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
+import { API } from "../config/api";
 
 function RegisterComp(props) {
-  const { showModal, handleCloseModal, handleLogin } = props;
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { showModal, handleCloseModal } = props;
+  // const [fullName, setFullName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
@@ -19,43 +19,58 @@ function RegisterComp(props) {
   // };
 
   const [form, setForm] = useState({
-    name: '',
+    fullName: '',
     email: '',
     password: '',
-  });
+  })
+
+  const [message, setMessage] = useState(null)
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+  }
+  console.log(form.email);
+
+  // let {data: product} = useQuery('registerCache', async () => {
+  //   const response = await API.post('/register')
+  //   return response.data.data
+  // })
+  // console.log(product);
+
 
   const handleSubmit = useMutation(async (e) => {
     try {
-      e.preventDefault();
-    
-      const response = await API.post('/register', form);
+      e.preventDefault()
+      handleCloseModal()
+
+      const response = await API.post('/register', form)
+      console.log("register success : ", response)
 
       const alert = (
         <Alert variant="success" className="py-1">
-          Register Success!
-        </Alert>
-      );
-      setMessage(alert);
+          Register Success
+        </Alert>  
+      )
+      setMessage(alert)
       setForm({
-        name: '',
+        fullName: '',
         email: '',
         password: '',
-      });
-
+      })
     } catch (error) {
       const alert = (
         <Alert variant="danger" className="py-1">
-          Failed to Register!
-        </Alert>
-      );
-
-      setMessage(alert);
-      console.log("register failed :", error);
-    }
-
-  });
-
-
+          Failed to register
+        </Alert> 
+      )
+   
+    setMessage(alert)
+    console.log("register failed :", error);
+  }
+  })
 
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
@@ -66,8 +81,9 @@ function RegisterComp(props) {
           <Form.Control
             type="text"
             placeholder="Enter Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            // value={fullName}
+            name="Name"
+            onChange={handleChange}
           />
         </FormGroup>
         <FormGroup controlId="formBasicEmail" className="p-2">
@@ -75,8 +91,9 @@ function RegisterComp(props) {
           <Form.Control
             type="email"
             placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            // value={email}
+            name="email"
+            onChange={handleChange}
           />
         </FormGroup>
 
@@ -85,8 +102,9 @@ function RegisterComp(props) {
           <Form.Control
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            // value={password}
+            name="password"
+            onChange={handleChange}
           />
         </Form.Group>
         <Button className="m-2 rounded" variant="primary" type="submit">

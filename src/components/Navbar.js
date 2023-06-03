@@ -18,8 +18,8 @@ function NavbarComponents() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  console.log(data,"ini data");
-  
+  console.log(data, "ini data");
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("loggedIn");
     if (isLoggedIn === "true") {
@@ -67,8 +67,8 @@ function NavbarComponents() {
   // };
 
 
-//  console.log(isAdmin);
-//  console.log(loggedIn);
+  //  console.log(isAdmin);
+  //  console.log(loggedIn);
 
   return (
     <div style={{ position: "relative" }}>
@@ -81,7 +81,7 @@ function NavbarComponents() {
           zIndex: "1",
         }}
       >
-        <Link to="/"><Image src={Logo}  /></Link>
+        <Link to="/"><Image src={Logo} /></Link>
       </div>
       <div
         style={{
@@ -93,7 +93,7 @@ function NavbarComponents() {
       >
         {data?.isUser ? (
           <ProfileDropdown handleLogout={handleLogout} />
-        ) : data?.isAdmin ? <ProfileDropdownAdmin handleLogout={handleLogout}/> : (
+        ) : data?.isAdmin ? <ProfileDropdownAdmin handleLogout={handleLogout} /> : (
           <>
             <Button
               className="btn border me-2"

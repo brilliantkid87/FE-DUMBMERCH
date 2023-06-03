@@ -80,85 +80,146 @@
 
 // export default LoginComp;
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { FormGroup } from "react-bootstrap";
+import { Alert, FormGroup } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { API, setAuthToken } from "../config/api";
+import { UserContext } from "../context/userContext";
 
-const users = [
-  {
-    email: "user@gmail.com",
-    password: "user",
-    isAdmin: false,
-    isUser: true,
-  },
-  {
-    email: "admin@gmail.com",
-    password: "admin",
-    isAdmin: true,
-    isUser: false,
-  },
-];
+// const users = [
+//   {
+//     email: "user@gmail.com",
+//     password: "user",
+//     isAdmin: false,
+//     isUser: true,
+//   },
+//   {
+//     email: "admin@gmail.com",
+//     password: "admin",
+//     isAdmin: true,
+//     isUser: false,
+//   },
+// ];
 
 function LoginComp(props) {
   const { showModal, handleCloseModal} =
     props;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [dataLogin, setDataLogin] = useState({
-    email: "",
-    password: "",
-    isUser: false,
-  });
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [dataLogin, setDataLogin] = useState({
+  //   email: "",
+  //   password: "",
+  //   isUser: false,
+  // });
   
   
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const user = users.find(
+  //     (user) => user.email === email && user.password === password
+  //   );
 
 
-    if (user) {
-      setDataLogin({
-        email: user.email,
-        password: user.password,
-        isUser: user.isUser,
-        isAdmin: user.isAdmin,
-      });
-    } else {
-      alert("Invalid credentials. Please try again.");
-    }
-  };
+  //   if (user) {
+  //     setDataLogin({
+  //       email: user.email,
+  //       password: user.password,
+  //       isUser: user.isUser,
+  //       isAdmin: user.isAdmin,
+  //     });
+  //   } else {
+  //     alert("Invalid credentials. Please try again.");
+  //   }
+  // };
+
+  let navigate = useNavigate();
+
+  const [_, dispatch] = useContext(UserContext)
+
+  const [message, setMessage] = useState(null)
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  })
   
+  const { email, password } = form;
 
-  useEffect(() => {
-    if (dataLogin.isUser || dataLogin.isAdmin) {
-      localStorage.setItem("login", JSON.stringify(dataLogin));
-      // jika salah satu true makan akan di set di key login dan datanya dari dataLogin
-      if (!dataLogin.isAdmin) {
-        window.location.href = "/";
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value  
+    })
+  }
+
+  const handleSubmit = useMutation(async (e) => {
+    try {
+      e.preventDefault()
+      handleCloseModal()
+      // Masukkan data untuk proses login, Anda juga bisa membuatnya tanpa konfigurasi apapun, karena axios akan secara otomatis menanganinya.
+      const response = await API.post('/login', form)
+      console.log("login suucces :", response);
+
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        payload: response.data.data,
+      })
+
+      setAuthToken(localStorage.token)
+
+      if (response.data.data === 'admin') {
+        navigate('/')
       } else {
-        window.location.href = "/HomeAdmin";
+        navigate('/')
       }
+
+      const alert = (
+        <Alert variant="success" className="py-1">
+          Login Success
+        </Alert>  
+      )
+      setMessage(alert)
+    } catch (error) {
+      const alert = (
+        <Alert variant="success" className="py-1">
+          Login Failed
+        </Alert>  
+      )
+      setMessage(alert)
+      console.log("login failed : ",  error);
     }
-  }, [dataLogin]);
-  // kalo kosong render semua yang ada di useEffect
+  })
+
+  // useEffect(() => {
+  //   if (dataLogin.isUser || dataLogin.isAdmin) {
+  //     localStorage.setItem("login", JSON.stringify(dataLogin));
+  //     // jika salah satu true makan akan di set di key login dan datanya dari dataLogin
+  //     if (!dataLogin.isAdmin) {
+  //       window.location.href = "/";
+  //     } else {
+  //       window.location.href = "/HomeAdmin";
+  //     }
+  //   }
+  // }, [dataLogin]);
+  // // kalo kosong render semua yang ada di useEffect
   
 
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
       <h3 className="mx-auto my-3">Login</h3>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={(e) => handleSubmit.mutate(e)}>
         <FormGroup controlId="formBasicEmail" className="p-2">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type="email"
             placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            // value={email}
+            name="email"
+            onChange={handleChange}
           />
         </FormGroup>
 
@@ -167,8 +228,9 @@ function LoginComp(props) {
           <Form.Control
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            // value={password}
+            name="password"
+            onChange={handleChange}
           />
         </Form.Group>
           <Button className="m-2 rounded" variant="primary" type="submit">

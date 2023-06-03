@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import PersonalInfo from "../assets/Rectangle 12.png"
@@ -7,12 +7,24 @@ import Logo from "../assets/Icon (2).png";
 import QRcode from "../assets/frame.png"
 import cardData2 from "../../dummy/FakeCardsTour";
 import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { API } from "../../config/api";
+import jwtDecode from "jwt-decode";
+import { UserContext } from "../../context/userContext";
 
 function ProfilesLog() {
-  const {id} = useParams() 
-  const selectorId = cardData2.find((Nico) => Nico.id === id)
-  const { quantity, price} = useParams();
 
+  // const token = localStorage.getItem('token')
+  const [state] = useContext(UserContext)
+  // const decoded = jwtDecode(token)
+  // console.log(decoded);
+
+
+  const { data: profiles } = useQuery('profilesCache', async () => {
+  const response = await API.get('/user')
+  return response.data.data
+  })
+console.log(profiles);
 
   return (
     <Container>
@@ -46,7 +58,7 @@ function ProfilesLog() {
           <div className="col-sm-6">
             <div className="">
               <div className="card-body">
-                <h6 className="card-title">Radif Ganteng</h6>
+                <h6 className="card-title">{state?.user.name}</h6>
                 <p className="card-text">
                 Full name
                 </p>
@@ -54,7 +66,7 @@ function ProfilesLog() {
             </div>
             <div className="">
               <div className="card-body">
-                <h6 className="card-title">radifgans@gmail.com</h6>
+                <h6 className="card-title">{profiles?.email}</h6>
                 <p className="card-text">
                 Email
                 </p>
@@ -189,7 +201,7 @@ function ProfilesLog() {
               <td>083896833112</td>
               <td>Qty</td>
               <td>:</td>
-              <td>{quantity}</td>
+              {/* <td>{quantity}</td> */}
             </tr>
             <tr>
               <th scope="row"></th>
@@ -198,7 +210,7 @@ function ProfilesLog() {
               <td></td>
               <td>Total</td>
               <td>:</td>
-              <td className="text-warning">IDR. {(selectorId?.price * quantity).toLocaleString()}</td>
+              {/* <td className="text-warning">IDR. {(selectorId?.price * quantity).toLocaleString()}</td> */}
             </tr>
           </tbody>
         </table>
