@@ -90,21 +90,6 @@ import { useMutation } from "react-query";
 import { API, setAuthToken } from "../config/api";
 import { UserContext } from "../context/userContext";
 
-// const users = [
-//   {
-//     email: "user@gmail.com",
-//     password: "user",
-//     isAdmin: false,
-//     isUser: true,
-//   },
-//   {
-//     email: "admin@gmail.com",
-//     password: "admin",
-//     isAdmin: true,
-//     isUser: false,
-//   },
-// ];
-
 function LoginComp(props) {
   const { showModal, handleCloseModal} =
     props;
@@ -166,13 +151,14 @@ function LoginComp(props) {
 
       dispatch({
         type: 'LOGIN_SUCCESS',
+        // role: response.data.data.role,
         payload: response.data.data,
       })
 
       setAuthToken(localStorage.token)
 
-      if (response.data.data === 'admin') {
-        navigate('/')
+      if (response.data.data.role === 'admin') {
+        navigate('/HomeAdmin')
       } else {
         navigate('/')
       }

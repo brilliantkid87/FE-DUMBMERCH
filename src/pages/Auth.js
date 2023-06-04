@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { Col, Container, Row } from "react-bootstrap";
+import RegisterComp from "../components/Register";
+import LoginComp from "../components/Login";
 
 export default function Auth() {
     let navigate = useNavigate()
@@ -47,7 +49,7 @@ export default function Auth() {
                             </button>
                         </div>
                     </Col>
-                    <Col md="6">{isRegister ? <Register /> : <Login />}</Col>
+                    <Col md="6">{isRegister ? <RegisterComp /> : <LoginComp />}</Col>
                 </Row>
             </Container>
         </div>

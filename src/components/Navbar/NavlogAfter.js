@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Logo from "../assets/Icon.png";
@@ -7,27 +7,35 @@ import LoginComp from "../Login";
 import RegisterComp from "../Register";
 import ProfileDropdown from "../ProfileDropdown";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/userContext";
 
 
 function NavLogAfter() {
   // const {setLoggedIn, isAdmin} = props;
+   const [state, dispatch] = useContext(UserContext)
+  console.log(state);
+  
+  const login = state.isLogin;
+  const customer = state.role;
 
-  const james = JSON.parse(localStorage.getItem("login"))
+  let navigate = useNavigate()
+
+  // const james = JSON.parse(localStorage.getItem("login"))
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("loggedIn");
-    if (isLoggedIn === "true") {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const isLoggedIn = localStorage.getItem("loggedIn");
+  //   if (isLoggedIn === "true") {
+  //     setLoggedIn(true);
+  //   } else {
+  //     setLoggedIn(false);
+  //   }
+  // }, []);
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
@@ -45,15 +53,23 @@ function NavLogAfter() {
     setShowRegisterModal(true);
   };
 
-  const handleLogin = () => {
-    setLoggedIn(true);
-  };
+  // const handleLogin = () => {
+  //   setLoggedIn(true);
+  // };
 
-  const handleAdmin = () => {
-    setIsAdmin(true);
-  }
+  // const handleAdmin = () => {
+  //   setIsAdmin(true);
+  // }
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem("login");
+  //   window.location.href = "/";
+  // };
 
   const handleLogout = () => {
+    dispatch({
+      type: "LOGOUT",
+    });
     localStorage.removeItem("login");
     window.location.href = "/";
   };
@@ -85,9 +101,9 @@ function NavLogAfter() {
               style={{ maxHeight: "100px" }}
               navbarScroll
             ></Nav>
-            {james?.isUser ? (
+            {login && customer === "customer" ? (
           <ProfileDropdown handleLogout={handleLogout} />
-        ) : james?.isAdmin ? <ProfileDropdownAdmin handleLogout={handleLogout}/> : (
+        ) : login && customer === "admin" ? <ProfileDropdownAdmin handleLogout={handleLogout}/> : (
           <>
             <Button
               className="btn border me-2"
@@ -108,15 +124,15 @@ function NavLogAfter() {
             <LoginComp
         showModal={showLoginModal}
         handleCloseModal={handleCloseLoginModal}
-        handleLogin={handleLogin}
-        handleAdmin={handleAdmin}
-        setIsAdmin={setIsAdmin}
+        // handleLogin={handleLogin}
+        // handleAdmin={handleAdmin}
+        // setIsAdmin={setIsAdmin}
         handleLogout={handleLogout}
       />
             <RegisterComp
         showModal={showRegisterModal}
         handleCloseModal={handleCloseRegisterModal}
-        handleLogin={handleLogin}
+        // handleLogin={handleLogin}
       />
           </Navbar.Collapse>
         </Container>

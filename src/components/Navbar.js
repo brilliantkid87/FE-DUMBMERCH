@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Wallpaper from "./assets/image1.png";
@@ -9,25 +9,42 @@ import LoginComp from "./Login";
 import RegisterComp from "./Register";
 import ProfileDropdown from "./ProfileDropdown";
 import ProfileDropdownAdmin from "./Admin/Dropdwon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
 
 function NavbarComponents() {
-  const data = JSON.parse(localStorage.getItem("login"))
+  const [state, dispatch] = useContext(UserContext)
+  console.log(state);
+  
+  var login = state.isLogin;
+  var customer = state.role;
+
+  let navigate = useNavigate()
+
+  // const logout = () => {
+  //   console.log(state);
+  //   dispatch({
+  //     type: "LOGOUT"
+  //   })
+
+  //   navigate("/auth")
+  // }
+  // const data = JSON.parse(localStorage.getItem("login"))
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  console.log(data, "ini data");
+  // const [loggedIn, setLoggedIn] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
+  // console.log(data, "ini data");
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("loggedIn");
-    if (isLoggedIn === "true") {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const isLoggedIn = localStorage.getItem("loggedIn");
+  //   if (isLoggedIn === "true") {
+  //     setLoggedIn(true);
+  //   } else {
+  //     setLoggedIn(false);
+  //   }
+  // }, []);
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
@@ -45,15 +62,18 @@ function NavbarComponents() {
     setShowRegisterModal(true);
   };
 
-  const handleLogin = () => {
-    setLoggedIn(true);
-  };
+  // const handleLogin = () => {
+  //   setLoggedIn(true);
+  // };
 
-  const handleAdmin = () => {
-    setIsAdmin(true);
-  }
+  // const handleAdmin = () => {
+  //   setIsAdmin(true);
+  // }
 
   const handleLogout = () => {
+    dispatch({
+      type: "LOGOUT",
+    });
     localStorage.removeItem("login");
     window.location.href = "/";
   };
@@ -91,9 +111,9 @@ function NavbarComponents() {
           zIndex: "1",
         }}
       >
-        {data?.isUser ? (
+        {login && customer === "customer" ? (
           <ProfileDropdown handleLogout={handleLogout} />
-        ) : data?.isAdmin ? <ProfileDropdownAdmin handleLogout={handleLogout} /> : (
+        ) : login && customer === "admin" ? <ProfileDropdownAdmin handleLogout={handleLogout} /> : (
           <>
             <Button
               className="btn border me-2"
@@ -140,15 +160,15 @@ function NavbarComponents() {
       <LoginComp
         showModal={showLoginModal}
         handleCloseModal={handleCloseLoginModal}
-        handleLogin={handleLogin}
-        handleAdmin={handleAdmin}
-        setIsAdmin={setIsAdmin}
+        // handleLogin={handleLogin}
+        // handleAdmin={handleAdmin}
+        // setIsAdmin={setIsAdmin}
         handleLogout={handleLogout}
       />
       <RegisterComp
         showModal={showRegisterModal}
         handleCloseModal={handleCloseRegisterModal}
-        handleLogin={handleLogin}
+        // handleLogin={handleLogin}
       />
     </div>
   );

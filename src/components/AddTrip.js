@@ -93,9 +93,6 @@ function AddTrips() {
             formData.set('quota', form.quota);
             formData.set('description', form.description);
             formData.set('image', form.image[0], form.image[0].name);
-            // let country_id = form.country_id.map((countryId) =>
-            //     Number(countryId)
-            // );
             formData.set('country_id', form.country_id);
             console.log(formData.getAll('country_id'))
 

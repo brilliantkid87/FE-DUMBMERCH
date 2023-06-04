@@ -18,13 +18,13 @@ function RegisterComp(props) {
   //   handleCloseModal();
   // };
 
+  const [message, setMessage] = useState(null)
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     password: '',
   })
 
-  const [message, setMessage] = useState(null)
 
   const handleChange = (e) => {
     setForm({
