@@ -4,6 +4,7 @@ import CardComponents from "../components/Cards"
 import FooterComponents from "../components/Footer"
 import ListTransactionAdmins from "../components/Admin/ListTransactionAdmin"
 import { Link } from "react-router-dom"
+import CardsTours from "../components/CardsTour"
 
 
 function Home() {
@@ -14,7 +15,7 @@ function Home() {
             <div>
                 <NavbarComponents />
                 <CardComponents />
-                <CardsTour />
+                <CardsTours />
                 <FooterComponents />
 
             </div>

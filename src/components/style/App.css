@@ -1,3 +1,15 @@
 .bgnav {
     background-image: url("/src/components/assets/navbar2.png");
 }
+
+.full-background {
+    width: 100%;
+    height: 100%;
+}
+  
+.half-background {
+    width: 50%;
+    height: 100%;
+    transform: translateX(50%);
+}
+  

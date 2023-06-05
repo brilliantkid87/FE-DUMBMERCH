@@ -22,6 +22,8 @@ function NavbarComponents() {
 
   let navigate = useNavigate()
 
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   // const logout = () => {
   //   console.log(state);
   //   dispatch({
@@ -31,8 +33,6 @@ function NavbarComponents() {
   //   navigate("/auth")
   // }
   // const data = JSON.parse(localStorage.getItem("login"))
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
   // const [loggedIn, setLoggedIn] = useState(false);
   // const [isAdmin, setIsAdmin] = useState(false);
   // console.log(data, "ini data");
@@ -89,8 +89,10 @@ function NavbarComponents() {
 
   //  console.log(isAdmin);
   //  console.log(loggedIn);
+  
 
   return (
+    
     <div style={{ position: "relative" }}>
       <Image src={Wallpaper} fluid />
       <div

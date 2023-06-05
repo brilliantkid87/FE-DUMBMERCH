@@ -22,13 +22,13 @@ function ProfileDropdown({ handleLogout }) {
       <Dropdown.Menu>
         <>
         <Dropdown.Item>
-        <Link style={{ textDecoration: "none", color: "black"}} to={`/ProfilePages/${selectorId?.id}/${quantity}`}>
+        <Link style={{ textDecoration: "none", color: "black"}} to={"/ProfilePages"}>
             Profile
           </Link>
         </Dropdown.Item>
 
         <Dropdown.Item>
-          <Link style={{ textDecoration: "none", color: "black"}} to={`/WaitingPayment/${selectorId?.id}/${quantity}`}>
+          <Link style={{ textDecoration: "none", color: "black"}} to={"/WaitingPayment"}>
             Pay
           </Link>
         </Dropdown.Item>

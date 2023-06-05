@@ -55,9 +55,9 @@ function IncomeTrips() {
               />
               <Card.Body>
                 <Card.Title>
-                  <a target="blank" href={`/DetailTourPage/${card.id}`}>
-                    {card.title}
-                  </a>
+                      <Link to={`/DetailTourPage/${card.id}`} >
+                        {card.title}
+                      </Link>
                 </Card.Title>
               </Card.Body>
               <div

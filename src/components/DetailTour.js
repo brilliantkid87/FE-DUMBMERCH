@@ -11,12 +11,13 @@ import { FormGroup } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Minus from "./assets/Minus.png";
 import Plus from "./assets/Plus.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import cardData2 from "../dummy/FakeCardsTour";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
+import { UserContext } from "../context/userContext";
 
 function CarouselImg() {
   let navigate = useNavigate()
@@ -24,49 +25,25 @@ function CarouselImg() {
   // const selectorId = cardData2.find((Nico) => Nico.id === id)
 
   const [quantity, setQuantity] = useState(1);
-  // const isLoggedIn = localStorage.getItem("login");
-  // const isUser = JSON.parse(localStorage.getItem("login"))?.isUser;
+  const { state } = useContext(UserContext);
+
+  const handleBookNow = () => {
+    const isLoggedIn = localStorage.getItem("isLogin");
+
+    if (isLoggedIn) {
+      navigate("/WaitingPayment/");
+    } else {
+      navigate("/");
+    }
+  };
 
   const { data: trip } = useQuery('tripDetailCache', async () => {
     const response = await API.get('/trip/' + id)
     return response.data.data
   })
-  console.log(trip);
+  // console.log(trip);
 
-  const handleBook = useMutation(async (e) => {
-    try {
-      e.preventDefault()
-
-      const config = {
-        headers: {
-          'Content-type': 'application/json',
-        }
-      };
-
-      const data = {
-        // title: trip.title,
-        // accomodation: trip.accomodation,
-        // transportation: trip.transportation,
-        // eat: trip.eat,
-        // day: trip.day,
-        // night: trip.night,
-        // date_trip: trip.date_trip,
-        price: trip.price,
-        // quota: trip.quota,
-        // description: trip.description,
-        // image: trip.image,
-        // country_id: trip.country_id,
-      };
-
-      const body = JSON.stringify(data)
-
-      const response = await API.post('/transaction', body, config)
-      console.log("transaction success: ", response);
-      navigate('/WaitingPayment')
-    } catch (error) {
-      console.log("Book Failed :", error);
-    }
-  })
+  let priceTotal = trip?.price * quantity
 
   const handleIncrement = () => {
     setQuantity(quantity + 1);
@@ -88,8 +65,19 @@ function CarouselImg() {
     setShowModal(true);
   };
 
+  const dataTransaction = [
+    {
+      title: trip?.title,
+      transportation: trip?.transportation,
+      accommodation: trip?.accommodation,
+      price: priceTotal,
+      quantity: quantity,
+    }
+  ]
 
+  localStorage.setItem('user', JSON.stringify(dataTransaction))
 
+  console.log(dataTransaction)
   return (
     <Container>
       <div>
@@ -102,7 +90,6 @@ function CarouselImg() {
           </div>
         </div>
         <div className="d-flex justify-content-center mt-5 overflow-x-hidden">
-        {/* <div className="d-flex justify-content-between mt-5"> */}
           <Image
             src={DetailTour2}
             style={{ maxWidth: "250px", cursor: "pointer" }}
@@ -128,8 +115,27 @@ function CarouselImg() {
             style={{ maxWidth: "250px", cursor: "pointer" }}
             onClick={handleOpenModal}
           />
-        {/* </div> */}
+      
 
+        
+        </div>
+        <div className="d-flex justify-content-center mt-5">
+          <FormGroup controlId="formBasicEmail" className="p-2">
+            <Image src={hotel} />
+            <Form.Label>{trip?.accommodation}</Form.Label>
+          </FormGroup>
+          <FormGroup controlId="formBasicEmail" className="p-2">
+            <Image src={hotel} />
+            <Form.Label>{trip?.transportation}</Form.Label>
+          </FormGroup>
+          <FormGroup controlId="formBasicEmail" className="p-2">
+            <Image src={hotel} />
+            <Form.Label>{trip?.eat}</Form.Label>
+          </FormGroup>
+          <FormGroup controlId="formBasicEmail" className="p-2">
+            <Image src={hotel} />
+            <Form.Label>{trip?.day} day {trip?.night} night</Form.Label>
+          </FormGroup>
         </div>
         <div className="mt-5">
           <h5>Description</h5>
@@ -165,13 +171,11 @@ function CarouselImg() {
           </h5>
         </div>
         <div className="d-flex justify-content-end mt-2">
-          {/* {isUser && isLoggedIn ? ( */}
-          {/* // <Link to={`/WaitingPayment/${selectorId.id}/${quantity}`}> */}
-          <Button type="submit" onClick={(e) => handleBook.mutate(e)}>Book Now</Button>
-          {/* // </Link> */}
-          {/* ) : ( */}
-          {/* <Button disabled>Login to Book</Button> */}
-          {/* )} */}
+  
+          <Link to="/WaitingPayment/">
+            <Button>Book Now</Button>
+          </Link>
+        
         </div>
       </div>
 

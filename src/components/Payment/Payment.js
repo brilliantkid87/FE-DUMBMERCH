@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Logo from "../assets/Icon (2).png";
 import Image from "react-bootstrap/Image";
 import { Button, Container, Modal } from "react-bootstrap";
@@ -8,8 +8,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import cardData2 from "../../dummy/FakeCardsTour";
 import { useMutation, useQuery } from "react-query";
 import { API } from "../../config/api";
+import { UserContext } from "../../context/userContext";
 
 function PaymentCard() {
+  const [state] = useContext(UserContext)
   const navigate = useNavigate()
   const { id } = useParams();
   // const selectorId = cardData2.find((Nico) => Nico.id === id);
@@ -17,55 +19,46 @@ function PaymentCard() {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const { data: payment } = useQuery('paymentCache', async () => {
-    const response = await API.get('/transaction/' + id)
-    return response.data.data
-  })
-  console.log(payment);
-
-   const handlePay = useMutation(async (e) => {
-    try {
-      e.preventDefault()
-
-      const config = {
-        headers: {
-          'Content-type': 'application/json',
-        }
-      };
-
-      const data = {
-        title: payment.title,
-        accomodation: payment.accomodation,
-        transportation: payment.transportation,
-        eat: payment.eat,
-        day: payment.day,
-        night: payment.night,
-        date_payment: payment.date_trip,
-        price: payment.price,
-        quota: payment.quota,
-        description: payment.description,
-        image: payment.image,
-        country_id: payment.country_id,
-      };
-
-      const body = JSON.stringify(data)
-
-      const response = await API.post('/transaction', body, config)
-      console.log("transaction success: ", response);
-      navigate('/WaitingApprove')
-    } catch (error) {
-      console.log("Book Failed :", error);
-    }
-  })
-
   const handlePayButtonClick = () => {
     setShowConfirmation(true);
+    localStorage.removeItem('user')
   };
 
   const handleConfirmationClose = () => {
     setShowConfirmation(false);
+
   };
 
+  const data = JSON.parse(localStorage.getItem('user'))
+
+  const handleBuy = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+
+      const dataTrans = {
+        TripId: data.id,
+        counterqty: data.counterqty,
+        total: data.price,
+        status: "Approve",
+      };
+
+      const body = JSON.stringify(data);
+
+      const response = await API.post('/transaction', body, config);
+      console.log("transaction success :", response)
+      navigate('/profile');
+    } catch (error) {
+      console.log("transaction failed : ", error);
+    }
+  });
+
+  console.log(data);
   return (
     <>
       <Container>
@@ -85,7 +78,7 @@ function PaymentCard() {
             <div className="col-sm-3 mb-3 mb-sm-0">
               <div className="">
                 <div className="card-body">
-                  <h5 className="card-title">6D/4N Fun Tassie Vacation</h5>
+                  <h5 className="card-title">{data && data[0]?.title}</h5>
                   <p className="card-text">Australia</p>
                 </div>
               </div>
@@ -157,7 +150,7 @@ function PaymentCard() {
                 <td>083896833112</td>
                 <td>Qty</td>
                 <td>:</td>
-                <td>{quantity}</td>
+                <td>{data && data[0]?.quantity}</td>
               </tr>
               <tr>
                 <th scope="row"></th>
@@ -167,7 +160,7 @@ function PaymentCard() {
                 <td>Total</td>
                 <td>:</td>
                 <td className="text-warning">
-                  {/* IDR. {(selectorId?.price * quantity).toLocaleString()} */}
+                  IDR. {(data && data[0]?.price)}.
                 </td>
               </tr>
             </tbody>
@@ -175,7 +168,7 @@ function PaymentCard() {
         </div>
       </Container>
       <Container className="d-flex justify-content-end">
-        <Button onClick={handlePayButtonClick}>Pay</Button>
+        <Button onClick={(e) => handleBuy.mutate(e)}>Pay</Button>
       </Container>
 
       <Modal show={showConfirmation} onHide={handleConfirmationClose}>
@@ -185,7 +178,7 @@ function PaymentCard() {
         <Modal.Body>
           <p>Your payment will be confirmed within 1 x 24 hours.</p>
           <p>
-            {/* To see your orders, click <Link to={`/WaitingApprove/${selectorId?.id}/${quantity}`}>Here</Link>. Thank you! */}
+            To see your orders, click <Link to={`/WaitingApprove/`}>Here</Link>. Thank you!
           </p>
         </Modal.Body>
         <Modal.Footer>

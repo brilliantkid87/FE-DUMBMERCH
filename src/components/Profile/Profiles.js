@@ -21,11 +21,14 @@ function ProfilesLog() {
 
 
 
-  const { data: profiles } = useQuery('profilesCache', async () => {
-  const response = await API.get('/user')
-  return response.data.data
-  })
-console.log(profiles);
+  // const { data: profiles } = useQuery('profilesCache', async () => {
+  // const response = await API.get('/user')
+  // return response.data.data
+  // })
+
+  // console.log(profiles);
+
+
 
   return (
     <Container>
@@ -67,7 +70,7 @@ console.log(profiles);
             </div>
             <div className="">
               <div className="card-body">
-                <h6 className="card-title">{profiles?.email}</h6>
+                <h6 className="card-title">{state?.user.email}</h6>
                 <p className="card-text">
                 Email
                 </p>
@@ -75,7 +78,7 @@ console.log(profiles);
             </div>
             <div className="">
               <div className="card-body">
-                <h6 className="card-title">0812-8623-8911</h6>
+                <h6 className="card-title">{state?.user.phone}</h6>
                 <p className="card-text">
                 Mobile phone
                 </p>
@@ -83,7 +86,7 @@ console.log(profiles);
             </div>
             <div className="">
               <div className="card-body">
-                <h6 className="card-title">Perumahan Permata Bintaro Residence C-3</h6>
+                <h6 className="card-title">{state?.user.address}</h6>
                 <p className="card-text">
                 Address
                 </p>

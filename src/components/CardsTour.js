@@ -94,7 +94,7 @@ import { Link } from "react-router-dom";
 import { API } from "../config/api";
 import { useQuery } from "react-query";
 
-function IncomeTrips() {
+function CardsTours() {
     const { data: trip } = useQuery('tripsCache', async () => {
         const response = await API.get('/trips');
         return response.data.data;
@@ -131,9 +131,9 @@ function IncomeTrips() {
                             />
                             <Card.Body>
                                 <Card.Title>
-                                    <a target="blank" href={`/DetailTourPage/${card.id}`}>
+                                    <Link to={`/DetailTourPage/${card.id}`} >
                                         {card.title}
-                                    </a>
+                                    </Link>
                                 </Card.Title>
                             </Card.Body>
                             <div
@@ -162,4 +162,4 @@ function IncomeTrips() {
     );
 }
 
-export default IncomeTrips;
+export default CardsTours;

@@ -83,7 +83,7 @@ function AddTrips() {
 
             const formData = new FormData();
             formData.set('title', form.title);
-            formData.set('accomodation', form.accomodation);
+            formData.set('accommodation', form.accommodation);
             formData.set('transportation', form.transportation);
             formData.set('eat', form.eat);
             formData.set('day', form.day);
@@ -143,7 +143,7 @@ function AddTrips() {
                         className="mt-3"
                         controlId="exampleForm.ControlInput1"
                     >
-                        <Form.Label>Accommodation</Form.Label>
+                        <Form.Label>accommodation</Form.Label>
                         <Form.Control
                             name="accomodation"
                             onChange={handleChange}

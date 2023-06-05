@@ -59,6 +59,8 @@ function RegisterComp(props) {
         fullName: '',
         email: '',
         password: '',
+        phone: '',
+        address: '',
       })
     } catch (error) {
       const alert = (
@@ -104,6 +106,28 @@ function RegisterComp(props) {
             placeholder="Password"
             // value={password}
             name="password"
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 p-2" controlId="formBasicPassword">
+          <Form.Label>Phone</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="phone"
+            // value={password}
+            name="phone"
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 p-2" controlId="formBasicPassword">
+          <Form.Label>Address</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="address"
+            // value={password}
+            name="address"
             onChange={handleChange}
           />
         </Form.Group>
