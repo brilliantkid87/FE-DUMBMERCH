@@ -24,27 +24,7 @@ function NavbarComponents() {
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  // const logout = () => {
-  //   console.log(state);
-  //   dispatch({
-  //     type: "LOGOUT"
-  //   })
-
-  //   navigate("/auth")
-  // }
-  // const data = JSON.parse(localStorage.getItem("login"))
-  // const [loggedIn, setLoggedIn] = useState(false);
-  // const [isAdmin, setIsAdmin] = useState(false);
-  // console.log(data, "ini data");
-
-  // useEffect(() => {
-  //   const isLoggedIn = localStorage.getItem("loggedIn");
-  //   if (isLoggedIn === "true") {
-  //     setLoggedIn(true);
-  //   } else {
-  //     setLoggedIn(false);
-  //   }
-  // }, []);
+ 
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
@@ -62,13 +42,6 @@ function NavbarComponents() {
     setShowRegisterModal(true);
   };
 
-  // const handleLogin = () => {
-  //   setLoggedIn(true);
-  // };
-
-  // const handleAdmin = () => {
-  //   setIsAdmin(true);
-  // }
 
   const handleLogout = () => {
     dispatch({

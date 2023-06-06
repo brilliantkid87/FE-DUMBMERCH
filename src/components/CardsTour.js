@@ -117,7 +117,7 @@ function CardsTours() {
                         <Card
                             className="shadow p-1 mb-5 bg-white rounded"
                             style={{
-                                maxWidth: "450px",
+                                maxWidth: "400px",
                                 marginRight: "20px",
                                 borderRadius: "5px",
                                 marginTop: "20px",
@@ -125,13 +125,13 @@ function CardsTours() {
                             key={index}
                         >
                             <Image
-                                style={{ Width: "100%", maxHeight: "200px" }}
+                                style={{ Width: "100%", Height: "10vh" }}
                                 variant="top"
                                 src={card.image}
                             />
                             <Card.Body>
                                 <Card.Title>
-                                    <Link to={`/DetailTourPage/${card.id}`} >
+                                    <Link to={`/DetailTourPage/${card.id}`} style={{ textDecoration: 'none', color: 'black'}}>
                                         {card.title}
                                     </Link>
                                 </Card.Title>
@@ -140,7 +140,7 @@ function CardsTours() {
                                 style={{ padding: "16px" }}
                                 className="d-flex justify-content-between"
                             >
-                                <p className="text-warning">IDR. {card.price}</p>
+                                <p className="text-warning">IDR. {(card.price).toLocaleString()}</p>
                                 <p>{card.country.name}</p>
                             </div>
                             <p

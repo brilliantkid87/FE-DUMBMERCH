@@ -60,7 +60,7 @@ function PaymentCardWaitingApprove() {
               </div>
               <div className="mt-3">
                 <div className="card-body">
-                  <h5 className="card-title">Accomodation</h5>
+                  <h5 className="card-title">Accommodation</h5>
                   <p className="card-text">
                   Hotel 4 Nights
                   </p>

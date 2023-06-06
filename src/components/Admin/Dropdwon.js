@@ -12,7 +12,7 @@ function ProfileDropdownAdmin(props) {
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item>
-          <Link to="/AddTripAdmin">
+          <Link to="/AddTripAdmin" style={{ textDecoration: 'none', color: 'black'}}>
             Trip
           </Link>
         </Dropdown.Item>

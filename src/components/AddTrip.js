@@ -14,7 +14,7 @@ function AddTrips() {
     const [preview, setPreview] = useState(null);
     const [form, setForm] = useState({
         title: '',
-        accomodation: '',
+        accommodation: '',
         transportation: '',
         eat: '',
         day: '',
@@ -145,7 +145,7 @@ function AddTrips() {
                     >
                         <Form.Label>accommodation</Form.Label>
                         <Form.Control
-                            name="accomodation"
+                            name="accommodation"
                             onChange={handleChange}
                             className="bg-secondary"
                             type="text"

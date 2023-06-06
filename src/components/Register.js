@@ -8,15 +8,6 @@ import { API } from "../config/api";
 
 function RegisterComp(props) {
   const { showModal, handleCloseModal } = props;
-  // const [fullName, setFullName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   handleLogin();
-  //   handleCloseModal();
-  // };
 
   const [message, setMessage] = useState(null)
   const [form, setForm] = useState({

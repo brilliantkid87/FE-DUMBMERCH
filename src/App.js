@@ -74,21 +74,17 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/DetailTourPage/:id" element={<DetailTourPage />} />
           <Route element={<PrivateRouteAdmin />} >
-          {/* <Route element={<PrivateRoute isLogin={data?.isAdmin} />}> */}
             <Route path="/AddTripAdmin" element={<AddTripAdmins />} />
             <Route path="/IncomeTrips" element={<IncomeTrips />} />
             <Route path="/HomeAdmin" element={<ListTransactionAdmins />} />
           </Route>
 
           <Route element={<PrivateRouteLogin />} >
-
-          <Route element={<PrivateRouteUser />} >
-            {/* <Route element={<PrivateRoute isLogin={data?.isUser} />}> */}
-            <Route path="/ProfilePages" element={<ProfilePages />} />
-            <Route path="/DetailTourPage/:id" element={<DetailTourPage />} />
-            <Route path="/WaitingPayment" element={<WaitingPayment />} />
-            {/* <Route path="/DetailTourPage/:id" element={<DetailTourPage />} /> */}
-            <Route path="/WaitingApprove" element={<PaymentCardWaitingApprove />} />
+            <Route element={<PrivateRouteUser />} >
+              <Route path="/ProfilePages" element={<ProfilePages />} />
+              <Route path="/DetailTourPage/:id" element={<DetailTourPage />} />
+              <Route path="/WaitingPayment" element={<WaitingPayment />} />
+              <Route path="/WaitingApprove" element={<PaymentCardWaitingApprove />} />
             </Route>
           </Route>
         </Routes>

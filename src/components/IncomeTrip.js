@@ -55,7 +55,7 @@ function IncomeTrips() {
               />
               <Card.Body>
                 <Card.Title>
-                      <Link to={`/DetailTourPage/${card.id}`} >
+                      <Link to={`/DetailTourPage/${card.id}`} style={{ textDecoration: 'none'}} >
                         {card.title}
                       </Link>
                 </Card.Title>
