@@ -1,5 +1,6 @@
 import ProfilesLog from "../components/Profile/Profiles";
 import NavLogAfter from "../components/Navbar/NavlogAfter";
+import FooterComponents from "../components/Footer";
 
 
 function ProfilePages() {
@@ -9,6 +10,7 @@ function ProfilePages() {
     <div>
       <NavLogAfter />
       <ProfilesLog />
+      <FooterComponents />
     </div>
   )
 }

@@ -15,7 +15,7 @@ import calender from './assets/calendar 1.png'
 import Form from "react-bootstrap/Form";
 import Minus from "./assets/Minus.png";
 import Plus from "./assets/Plus.png";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import cardData2 from "../dummy/FakeCardsTour";
 import { useParams } from "react-router-dom";
@@ -28,17 +28,24 @@ function CarouselImg() {
   const { id } = useParams()
   const [quantity, setQuantity] = useState(1);
 
-  const { data: trip } = useQuery('tripDetailCache', async () => {
+  const [login] = useContext(UserContext)
+
+  const { data: trip, refetch } = useQuery('tripDetailCache', async () => {
     const response = await API.get('/trip/' + id)
     return response.data.data
-  })
+  }, { refetchIntervalInBackground: true })
   // console.log(trip);
 
   let priceTotal = trip?.price * quantity
 
   const handleIncrement = () => {
-    setQuantity(quantity + 1);
+    if (quantity < trip?.quota) {
+      setQuantity(quantity + 1);
+    } else {
+      alert("Sisa kuota tidak mencukupi!");
+    }
   };
+
 
   const handleDecrement = () => {
     if (quantity > 1) {
@@ -46,15 +53,6 @@ function CarouselImg() {
     }
   };
 
-  // const [showModal, setShowModal] = useState(false);
-
-  // const handleCloseModal = () => {
-  //   setShowModal(false);
-  // };
-
-  // const handleOpenModal = () => {
-  //   setShowModal(true);
-  // };
 
   const [showModal, setShowModal] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -78,6 +76,7 @@ function CarouselImg() {
   const handleBuy = useMutation(async (e) => {
     try {
       e.preventDefault();
+      refetch()
 
       const config = {
         headers: {
@@ -107,13 +106,13 @@ function CarouselImg() {
   });
 
 
-  // console.log(trip)
+  console.log(trip)
   return (
     <Container>
       <div>
         <h3 className="mt-5">{trip?.title}</h3>
 
-        <h3>{trip?.country.name}</h3>
+        <h3 className="text-danger">{trip?.country.name}</h3>
         <div className="">
           <div>
             <Image src={trip?.image} style={{ width: "100%" }} />
@@ -129,7 +128,7 @@ function CarouselImg() {
             <img
               src={DetailTour2}
               alt="Image 1"
-              style={{  width: "100%", height: "15vh" }}
+              style={{ width: "100%", height: "15vh" }}
             />
           </div>
           <div
@@ -140,7 +139,7 @@ function CarouselImg() {
             <img
               src={DetailTour3}
               alt="Image 2"
-              style={{  width: "100%", height: "15vh" }}
+              style={{ width: "100%", height: "15vh" }}
             />
           </div>
           <div
@@ -151,7 +150,7 @@ function CarouselImg() {
             <img
               src={Rectangle1}
               alt="Image 3"
-              style={{  width: "100%", height: "15vh" }}
+              style={{ width: "100%", height: "15vh" }}
             />
           </div>
           <div
@@ -162,22 +161,22 @@ function CarouselImg() {
             <img
               src={Rectangle2}
               alt="Image 4"
-              style={{  width: "100%", height: "15vh" }}
+              style={{ width: "100%", height: "15vh" }}
             />
           </div>
         </div>
 
         <div className="d-flex justify-content-between mt-5">
           <FormGroup controlId="formBasicEmail" className="p-2">
-            <Image  className="me-2" src={hotel} />
+            <Image className="me-2" src={hotel} />
             <Form.Label>{trip?.accommodation}</Form.Label>
           </FormGroup>
           <FormGroup controlId="formBasicEmail" className="p-2">
-            <Image  className="me-2" src={transaportation} />
+            <Image className="me-2" src={transaportation} />
             <Form.Label>{trip?.transportation}</Form.Label>
           </FormGroup>
           <FormGroup controlId="formBasicEmail" className="p-2">
-            <Image  className="me-2" src={meal} />
+            <Image className="me-2" src={meal} />
             <Form.Label>{trip?.eat}</Form.Label>
           </FormGroup>
           <FormGroup controlId="formBasicEmail" className="p-2">
@@ -185,7 +184,7 @@ function CarouselImg() {
             <Form.Label>{trip?.day} day {trip?.night} night</Form.Label>
           </FormGroup>
           <FormGroup controlId="formBasicEmail" className="p-2">
-            <Image  className="me-2" src={calender} />
+            <Image className="me-2" src={calender} />
             <Form.Label>{trip?.date_trip}</Form.Label>
           </FormGroup>
         </div>
@@ -223,9 +222,18 @@ function CarouselImg() {
           </h5>
         </div>
         <div className="d-flex justify-content-end mt-2">
-
-          <Button onClick={(e) => handleBuy.mutate(e)}>Book Now</Button>
-
+          {login?.role === "admin" ? (
+            <Button disabled>Kamu bukan user</Button>
+          ) : (
+            <Button disabled={trip?.quota === 0} onClick={(e) => handleBuy.mutate(e)}>
+              Book Now
+            </Button>
+          )}
+        </div>
+        <div >
+          <Button disabled>
+            Available Ticket {trip?.quota}
+          </Button>
         </div>
       </div>
 

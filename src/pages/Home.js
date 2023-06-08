@@ -15,8 +15,8 @@ function Home() {
             <div>
                 <NavbarComponents />
                 <CardComponents />
-                <CardsTours />
-                <FooterComponents />
+                {/* <CardsTours /> */}
+                {/* <FooterComponents /> */}
 
             </div>
         

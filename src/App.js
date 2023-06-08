@@ -72,6 +72,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+
           <Route path="/DetailTourPage/:id" element={<DetailTourPage />} />
           <Route element={<PrivateRouteAdmin />} >
             <Route path="/AddTripAdmin" element={<AddTripAdmins />} />

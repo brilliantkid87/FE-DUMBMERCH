@@ -4,6 +4,9 @@ import Image from "react-bootstrap/Image";
 import ProfileUser from "../components/assets/User.png";
 import { Link, useParams } from "react-router-dom";
 import cardData2 from "../dummy/FakeCardsTour";
+import profile from './assets/user 2.png'
+import logout from './assets/logout 1.png'
+
 
 
 function ProfileDropdown({ handleLogout }) {
@@ -20,21 +23,28 @@ function ProfileDropdown({ handleLogout }) {
         <Image src={ProfileUser} />
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <>
         <Dropdown.Item>
-        <Link style={{ textDecoration: "none", color: "black"}} to={"/ProfilePages"}>
-            Profile
-          </Link>
+          <div className="d-flex align-items-center">
+            <Image src={profile} className="mr-2" width={16} height={16} />
+            <Link style={{ textDecoration: "none", color: "black", marginLeft: '15px'}} to={"/ProfilePages"}>
+              Profile
+            </Link>
+          </div>
         </Dropdown.Item>
-
         <Dropdown.Item>
-          <Link style={{ textDecoration: "none", color: "black"}} to={"/WaitingPayment"}>
-            Pay
-          </Link>
+          <div className="d-flex align-items-center">
+            <Image src={ProfileUser} className="mr-2" width={16} height={16} />
+            <Link style={{ textDecoration: "none", color: "black" }} to={"/WaitingPayment"}>
+              Pay
+            </Link>
+          </div>
         </Dropdown.Item>
-          {/* <Dropdown.Item href="/WaitingPayment/:id/:quantity">Pay</Dropdown.Item> */}
-          <Dropdown.Item onClick={handleLogoutClick}>Logout</Dropdown.Item>
-        </>
+        <Dropdown.Item onClick={handleLogoutClick}>
+          <div className="d-flex align-items-center">
+            <Image src={logout} className="mr-2" width={16} height={16} style={{ marginRight: '15px'}}/>
+            Logout
+          </div>
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

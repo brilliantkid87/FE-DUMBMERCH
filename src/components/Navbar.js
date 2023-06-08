@@ -11,12 +11,19 @@ import ProfileDropdown from "./ProfileDropdown";
 import ProfileDropdownAdmin from "./Admin/Dropdwon";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
+import CardComponents from "./Cards";
+import CardsTours from "./CardsTour";
+import FooterComponents from "./Footer";
 
 
 function NavbarComponents() {
   const [state, dispatch] = useContext(UserContext)
   console.log(state);
-  
+
+  const [cari, setCari] = useState("")
+  console.log(cari);
+
+
   var login = state.isLogin;
   var customer = state.role;
 
@@ -24,7 +31,7 @@ function NavbarComponents() {
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
- 
+
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
@@ -51,21 +58,9 @@ function NavbarComponents() {
     window.location.href = "/";
   };
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("login");
-  //   if (loggedIn) {
-  //     window.location.href = "/";
-  //   } else if (isAdmin)
-  //     window.location.href = "/HomeAdmin";
-  // };
-
-
-  //  console.log(isAdmin);
-  //  console.log(loggedIn);
-  
 
   return (
-    
+
     <div style={{ position: "relative" }}>
       <Image src={Wallpaper} fluid />
       <div
@@ -112,6 +107,7 @@ function NavbarComponents() {
       >
         <h1>Explore</h1>
         <h3>your amazing city together</h3>
+        <CardsTours cari={cari} />
       </div>
       <div
         style={{ position: "absolute", top: "65%", zIndex: "1", width: "100%" }}
@@ -122,6 +118,7 @@ function NavbarComponents() {
             placeholder="Search..."
             aria-label="Search..."
             aria-describedby="basic-addon2"
+            onChange={(e) => { setCari(e.target.value) }}
           />
           <Button
             className="bg-warning"
@@ -132,6 +129,8 @@ function NavbarComponents() {
           </Button>
         </InputGroup>
       </div>
+      
+
       <LoginComp
         showModal={showLoginModal}
         handleCloseModal={handleCloseLoginModal}
@@ -143,7 +142,7 @@ function NavbarComponents() {
       <RegisterComp
         showModal={showRegisterModal}
         handleCloseModal={handleCloseRegisterModal}
-        // handleLogin={handleLogin}
+      // handleLogin={handleLogin}
       />
     </div>
   );

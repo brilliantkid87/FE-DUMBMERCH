@@ -41,7 +41,7 @@ function IncomeTrips() {
             <Card
               className="shadow p-1 mb-5 bg-white rounded"
               style={{
-                maxWidth: "450px",
+                maxWidth: "400px",
                 marginRight: "20px",
                 borderRadius: "5px",
                 marginTop: "20px",
@@ -49,22 +49,22 @@ function IncomeTrips() {
               key={index}
             >
               <Image
-                style={{ Width: "100%", maxHeight: "200px" }}
+                style={{ Width: "100%", maxHeight: "100vh" }}
                 variant="top"
                 src={card.image}
               />
               <Card.Body>
                 <Card.Title>
-                      <Link to={`/DetailTourPage/${card.id}`} style={{ textDecoration: 'none'}} >
+                      {/* <Link to={`/DetailTourPage/${card.id}`} style={{ textDecoration: 'none'}} > */}
                         {card.title}
-                      </Link>
+                      {/* </Link> */}
                 </Card.Title>
               </Card.Body>
               <div
                 style={{ padding: "16px" }}
                 className="d-flex justify-content-between"
               >
-                <p className="text-warning">IDR. {card.price}</p>
+                <p className="text-warning">IDR. {(card.price).toLocaleString()}</p>
                 <p>{card.country.name}</p>
               </div>
               <p

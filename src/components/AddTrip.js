@@ -6,6 +6,7 @@ import { API } from '../config/api';
 import { useMutation } from 'react-query';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import AddCountryButton from './country/country';
 
 function AddTrips() {
     let navigate = useNavigate();
@@ -39,23 +40,7 @@ function AddTrips() {
             console.log(error);
         }
     };
-
-    // Handle if countries selected
-    // const handleChangeCountryId = (e) => {
-    //     const id = e.target.value;
-    //     const checked = e.target.checked;
-
-    //     if (checked) {
-    //         setForm({ ...form, country_id: [...form.country_id, id] });
-    //     } else {
-    //         let newCountryId = form.country_id.filter((countryId) => {
-    //             return countryId !== id;
-    //         });
-
-    //         setForm({ ...form, country_id: newCountryId });
-    //     }
-    // };
-
+    
     // Handle change data on form
     const handleChange = (e) => {
         setForm({
@@ -70,14 +55,14 @@ function AddTrips() {
         }
     };
 
-    const handleSubmit = useMutation(async (e) => { 
+    const handleSubmit = useMutation(async (e) => {
         try {
             e.preventDefault();
 
             const config = {
                 headers: {
-                    'Content-type': 'multipart/form-data',  
-                    'Authorization': `Bearer ${localStorage.token}` 
+                    'Content-type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.token}`
                 },
             };
 
@@ -112,6 +97,7 @@ function AddTrips() {
     return (
         <>
             <Container>
+                {/* <AddCountryButton /> */}
                 <Form onSubmit={(e) => handleSubmit.mutate(e)}>
                     <Form.Group className="mt-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Title Trip</Form.Label>
@@ -122,23 +108,29 @@ function AddTrips() {
                             type="text"
                         />
                     </Form.Group>
-                    <Form.Group controlId="formCountry" className="mt-3">
+                    <Form.Group as={Row} controlId="formCountry" className="mt-3">
                         <Form.Label>Country</Form.Label>
-                        <Form.Control
-                            as="select"
-                            name="country_id"
-                            // onChange={handleChangeCountryId}
-                            onChange={handleChange}
-                            className="bg-secondary"
-                        >
-                            <option value="">Select a country</option>
-                            {countries.map((item, index) => (
-                                <option key={item.id} value={item.id}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </Form.Control>
+                        <Col sm={10}>
+                            <Form.Control
+                                as="select"
+                                name="country_id"
+                                // onChange={handleChangeCountryId}
+                                onChange={handleChange}
+                                className="bg-secondary"
+                            >
+                                <option value="">Select a country</option>
+                                {countries.map((item, index) => (
+                                    <option key={item.id} value={item.id}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Col>
+                        <Col className='d-flex justify-content-end'>
+                            <AddCountryButton />
+                        </Col>
                     </Form.Group>
+
                     <Form.Group
                         className="mt-3"
                         controlId="exampleForm.ControlInput1"
@@ -186,7 +178,7 @@ function AddTrips() {
                                 type="text"
                                 onChange={handleChange}
                                 name='day'
-                                />
+                            />
                         </Col>
                         <Form.Label column sm="1">
                             Night
@@ -194,10 +186,10 @@ function AddTrips() {
                         <Col sm="2">
                             <Form.Control
                                 className="bg-secondary"
-                                type="text" 
+                                type="text"
                                 name='night'
                                 onChange={handleChange}
-                                />
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group

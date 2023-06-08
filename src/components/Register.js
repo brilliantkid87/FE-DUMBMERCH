@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import { Alert, FormGroup } from "react-bootstrap";
 import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
+import palm from './assets/palm 1.png'
+import hibiscius from './assets/hibiscus 1.png'
 
 function RegisterComp(props) {
   const { showModal, handleCloseModal } = props;
@@ -43,7 +45,7 @@ function RegisterComp(props) {
       const alert = (
         <Alert variant="success" className="py-1">
           Register Success
-        </Alert>  
+        </Alert>
       )
       setMessage(alert)
       setForm({
@@ -57,17 +59,29 @@ function RegisterComp(props) {
       const alert = (
         <Alert variant="danger" className="py-1">
           Failed to register
-        </Alert> 
+        </Alert>
       )
-   
-    setMessage(alert)
-    console.log("register failed :", error);
-  }
+
+      setMessage(alert)
+      console.log("register failed :", error);
+    }
   })
 
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
-      <h3 className="mx-auto my-3">Register</h3>
+      <div className="position-relative">
+        <img
+          className="position-absolute top-0 start-0"
+          src={palm}
+          alt="Left Flower"
+        />
+        <img
+          className="position-absolute top-0 end-0"
+          src={hibiscius}
+          alt="Right Flower"
+        />
+        <h3 className="mx-auto my-3 text-center">Register</h3>
+      </div>
       <Form onSubmit={(e) => handleSubmit.mutate(e)}>
         <FormGroup controlId="" className="p-2">
           <Form.Label>Full Name</Form.Label>

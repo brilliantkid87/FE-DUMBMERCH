@@ -7,10 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { API, setAuthToken } from "../config/api";
 import { UserContext } from "../context/userContext";
+import palm from './assets/palm 1.png'
+import hibiscius from './assets/hibiscus 1.png'
 
 function LoginComp(props) {
-  const { showModal, handleCloseModal} =
+  const { showModal, handleCloseModal } =
     props;
+
+  const [ripplePosition, setRipplePosition] = useState({ top: 0, left: 0 });
+
+
 
 
   let navigate = useNavigate();
@@ -22,21 +28,32 @@ function LoginComp(props) {
     email: '',
     password: '',
   })
-  
+
   const { email, password } = form;
 
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value  
+      [e.target.name]: e.target.value
     })
   }
+
+  const handleClick = (e) => {
+    const buttonRect = e.target.getBoundingClientRect();
+    const position = {
+      top: e.clientY - buttonRect.top,
+      left: e.clientX - buttonRect.left,
+    };
+    setRipplePosition(position);
+  };
 
   const handleSubmit = useMutation(async (e) => {
     try {
       e.preventDefault()
       handleCloseModal()
       // Masukkan data untuk proses login, Anda juga bisa membuatnya tanpa konfigurasi apapun, karena axios akan secara otomatis menanganinya.
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       const response = await API.post('/login', form)
       console.log("login suucces :", response);
 
@@ -57,24 +74,36 @@ function LoginComp(props) {
       const alert = (
         <Alert variant="success" className="py-1">
           Login Success
-        </Alert>  
+        </Alert>
       )
       setMessage(alert)
     } catch (error) {
       const alert = (
         <Alert variant="success" className="py-1">
           Login Failed
-        </Alert>  
+        </Alert>
       )
       setMessage(alert)
-      console.log("login failed : ",  error);
+      console.log("login failed : ", error);
     }
   })
 
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
-      <h3 className="mx-auto my-3">Login</h3>
-      <Form onSubmit={(e) => handleSubmit.mutate(e)}>
+      <div className="position-relative">
+        <img
+          className="position-absolute top-0 start-0"
+          src={palm}
+          alt="Left Flower"
+        />
+        <img
+          className="position-absolute top-0 end-0"
+          src={hibiscius}
+          alt="Right Flower"
+        />
+        <h3 className="mx-auto my-3 text-center">Login</h3>
+      </div>
+      <Form className="mt-3" onSubmit={(e) => handleSubmit.mutate(e)}>
         <FormGroup controlId="formBasicEmail" className="p-2">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -96,9 +125,13 @@ function LoginComp(props) {
             onChange={handleChange}
           />
         </Form.Group>
-          <Button className="m-2 rounded" variant="primary" type="submit">
-            Login
-          </Button>
+        <Button
+          className="m-2 rounded cloudinary-button"
+          variant="primary"
+          type="submit"
+        >
+          Login
+        </Button>
       </Form>
       <Form.Group className="mb-3 p-2 m-auto" controlId="formBasicCheckbox">
         <Form.Label>Don't have an account? Click here</Form.Label>

@@ -115,7 +115,7 @@
 
 // export default ListTransactionAdmin;
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Container } from "react-bootstrap";
 import SearchIcon from "./assets/search 1.png";
 import Image from "react-bootstrap/Image";
@@ -123,8 +123,21 @@ import PaymentCardWaitingApprove from "./Payment/PaymentApprove";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import cardData3 from "../dummy/listtx";
+import { useQuery } from "react-query";
+import { UserContext } from "../context/userContext";
+import { API } from "../config/api";
+import ProfilePages from "../pages/ProfilesPage";
 
 function ListTransactionAdmin() {
+
+  // const [state] = useContext(UserContext)
+  const { data: listTrans } = useQuery('listTransCache', async () => {
+    const response = await API.get('/transactions')
+    return response.data.data
+  })
+  console.log("yoman", listTrans);
+
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -132,8 +145,8 @@ function ListTransactionAdmin() {
   return (
     <Container>
       <div className="mt-5">
-      <h3>Incoming Transaction</h3>
-      {/* {cardData3.map((card, index) => ( */}
+        <h3>Incoming Transaction</h3>
+
 
         <table className="table table-success table-striped">
           <thead>
@@ -141,40 +154,33 @@ function ListTransactionAdmin() {
               <th scope="col">No</th>
               <th scope="col">Users</th>
               <th scope="col">Trip</th>
-              <th scope="col">Bukti Transfer</th>
-              <th scope="col">Status Payment</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
-          {cardData3.map((card, index) => (
-          <tbody>
-            <tr>
-              <th scope="row">{card.no}</th>
-              <td>{card.name}</td>
-              <td>{card.title}</td>
-              <td>{card.buktiTransfer}</td>
-              <td>{card.statusPayment}</td>
-              <td>
+          {listTrans?.map((data, index) => (
+            <tbody>
+              <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>{data?.User?.name}</td>
+                <td>{data?.trips.title}</td>
+                <td>
                 <button
-                  type="button"
-                  class="btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  <Button variant="primary" onClick={handleShow}>
-                    <Image src={card.image} key={index}/>
-                  </Button>
-                </button>
-              </td>
-            </tr>
-          </tbody>
+                    type="button"
+                    class="btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  >
+                    <Button variant="primary" onClick={handleShow}>
+                      <Image src={data?.listTrans} key={index} />
+                    </Button>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
           ))}
         </table>
 
-      
-        
 
-        
       </div>
 
       <Modal className="modal-xl" show={show} onHide={handleClose}>
@@ -182,7 +188,7 @@ function ListTransactionAdmin() {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <PaymentCardWaitingApprove />
+          
         </Modal.Body>
         <Modal.Footer>
           <Button className="bg-danger" variant="secondary" onClick={handleClose}>
