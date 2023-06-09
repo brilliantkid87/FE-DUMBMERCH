@@ -82,7 +82,7 @@ function RegisterComp(props) {
         />
         <h3 className="mx-auto my-3 text-center">Register</h3>
       </div>
-      <Form onSubmit={(e) => handleSubmit.mutate(e)}>
+      <Form className="mt-5" onSubmit={(e) => handleSubmit.mutate(e)}>
         <FormGroup controlId="" className="p-2">
           <Form.Label>Full Name</Form.Label>
           <Form.Control
@@ -136,9 +136,12 @@ function RegisterComp(props) {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button className="m-2 rounded" variant="primary" type="submit">
-          Register
-        </Button>
+        <div className="d-flex justify-content-center">
+
+          <Button className="m-2 rounded" variant="primary" type="submit">
+            Register
+          </Button>
+        </div>
       </Form>
     </Modal>
   );

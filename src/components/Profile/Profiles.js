@@ -19,7 +19,7 @@ function ProfilesLog() {
     const response = await API.get('/transaction-user/' + state.user.id)
     return response.data.data
   })
-  console.log(profiles);
+  console.log(profiles?.status);
 
   return (
     <Container>
@@ -124,14 +124,14 @@ function ProfilesLog() {
                   <div className="card-body">
                     <h5 className="card-title">{data.trips.title}</h5>
                     <p className="card-text">
-                      Australia
+                    {data.trips.country.name}
                     </p>
                   </div>
                 </div>
                 <div className="mt-3">
                   <div className="card-body ">
                     <p className="card-text text-success">
-                      Approve
+                      {data.status}
                     </p>
                   </div>
                 </div>

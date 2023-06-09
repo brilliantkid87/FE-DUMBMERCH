@@ -15,10 +15,6 @@ import Auth from './pages/Auth';
 import './components/style/App.css'
 import { PrivateRouteAdmin, PrivateRouteLogin, PrivateRouteUser } from './pages/PrivateRoute';
 
-// const data = JSON.parse(localStorage.getItem("login"));
-// // login = key
-
-// console.log(data);
 function App() {
 
   let navigate = useNavigate();

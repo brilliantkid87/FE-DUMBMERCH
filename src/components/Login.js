@@ -125,13 +125,15 @@ function LoginComp(props) {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button
-          className="m-2 rounded cloudinary-button"
-          variant="primary"
-          type="submit"
-        >
-          Login
-        </Button>
+        <div className="d-flex justify-content-center bg-success">
+          <Button
+            className="m-2 rounded btn-success"
+            variant="primary"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Form>
       <Form.Group className="mb-3 p-2 m-auto" controlId="formBasicCheckbox">
         <Form.Label>Don't have an account? Click here</Form.Label>

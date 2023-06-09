@@ -1,19 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import cardData2 from "../dummy/FakeCardsTour";
 import Card from "react-bootstrap/Card"
 import Image from 'react-bootstrap/Image'
 import Container from 'react-bootstrap/Container';
 import { Button } from "react-bootstrap";
 import NavLogAfter from "./Navbar/NavlogAfter";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { API } from "../config/api";
-import { useQuery } from "react-query";
+import { queryCache, useMutation, useQuery } from "react-query";
+import FooterComponents from "./Footer";
 
 function IncomeTrips() {
+  let navigate = useNavigate();
+  const { id } = useParams()
   const { data: trip } = useQuery('tripsCache', async () => {
     const response = await API.get('/trips');
     return response.data.data;
   });
+
+  // const [ idDelete, setIdDelete ] = useState(null)
+
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await API.delete('/trip/' + id);
+      window.location.reload();
+      // navigate("")
+      console.log('Delete success : ', response);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <NavLogAfter />
@@ -55,9 +74,9 @@ function IncomeTrips() {
               />
               <Card.Body>
                 <Card.Title>
-                      {/* <Link to={`/DetailTourPage/${card.id}`} style={{ textDecoration: 'none'}} > */}
-                        {card.title}
-                      {/* </Link> */}
+                  {/* <Link to={`/DetailTourPage/${card.id}`} style={{ textDecoration: 'none'}} > */}
+                  {card.title}
+                  {/* </Link> */}
                 </Card.Title>
               </Card.Body>
               <div
@@ -78,10 +97,17 @@ function IncomeTrips() {
               >
                 {card.quota}
               </p>
+              <span className="d-flex justify-content-between">
+
+                <Button type="button" className="btn btn-primary btn-lg">Update</Button>
+                <Button type="button" className="btn btn-danger btn-lg" onClick={() => handleDelete(card.id)}>Delete</Button>
+              </span>
             </Card>
           ))}
         </div>
       </Container>
+      <FooterComponents />
+
     </>
   );
 }

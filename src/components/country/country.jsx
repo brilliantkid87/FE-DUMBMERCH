@@ -26,6 +26,7 @@ function AddCountryButton() {
       // Setelah menambahkan negara, atur kembali nama negara dan tutup modal
       setCountryName('');
       setShowModal(false);
+      window.location.reload()
     } catch (error) {
       console.log('add country failed', error);
     }

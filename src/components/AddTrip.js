@@ -82,11 +82,11 @@ function AddTrips() {
             console.log(formData.getAll('country_id'))
 
             const response = await API.post('/trip', formData, config);
-            console.log('add trip success : ', response);
+            console.log('Yoman : add trip success : ', response);
 
             navigate('/incometrips');
         } catch (error) {
-            console.log('add trip failed : ', error);
+            console.log('Yoman : add trip failed : ', error);
         }
     });
 
