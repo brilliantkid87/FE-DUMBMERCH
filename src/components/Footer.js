@@ -4,7 +4,7 @@ function FooterComponents() {
     return (
       <div className="bg-warning mt-5 position-relative">
         <footer className="p-2 d-flex justify-content-center">
-          Copyright @ 2020 Dewe Tour - BRILLIANTKID - NIS. All Rights
+          Copyright @ 2020 Dewe Tour - "" - NIS. All Rights
           reserved
         </footer>
         <img
