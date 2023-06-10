@@ -5,26 +5,19 @@ import Button from "react-bootstrap/Button";
 import { Alert, FormGroup } from "react-bootstrap";
 import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
+import palm from './assets/palm 1.png'
+import hibiscius from './assets/hibiscus 1.png'
 
 function RegisterComp(props) {
   const { showModal, handleCloseModal } = props;
-  // const [fullName, setFullName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   handleLogin();
-  //   handleCloseModal();
-  // };
-
+  const [message, setMessage] = useState(null)
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     password: '',
   })
 
-  const [message, setMessage] = useState(null)
 
   const handleChange = (e) => {
     setForm({
@@ -52,30 +45,44 @@ function RegisterComp(props) {
       const alert = (
         <Alert variant="success" className="py-1">
           Register Success
-        </Alert>  
+        </Alert>
       )
       setMessage(alert)
       setForm({
         fullName: '',
         email: '',
         password: '',
+        phone: '',
+        address: '',
       })
     } catch (error) {
       const alert = (
         <Alert variant="danger" className="py-1">
           Failed to register
-        </Alert> 
+        </Alert>
       )
-   
-    setMessage(alert)
-    console.log("register failed :", error);
-  }
+
+      setMessage(alert)
+      console.log("register failed :", error);
+    }
   })
 
   return (
     <Modal show={showModal} onHide={handleCloseModal}>
-      <h3 className="mx-auto my-3">Register</h3>
-      <Form onSubmit={(e) => handleSubmit.mutate(e)}>
+      <div className="position-relative">
+        <img
+          className="position-absolute top-0 start-0"
+          src={palm}
+          alt="Left Flower"
+        />
+        <img
+          className="position-absolute top-0 end-0"
+          src={hibiscius}
+          alt="Right Flower"
+        />
+        <h3 className="mx-auto my-3 text-center">Register</h3>
+      </div>
+      <Form className="mt-5" onSubmit={(e) => handleSubmit.mutate(e)}>
         <FormGroup controlId="" className="p-2">
           <Form.Label>Full Name</Form.Label>
           <Form.Control
@@ -107,9 +114,34 @@ function RegisterComp(props) {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button className="m-2 rounded" variant="primary" type="submit">
-          Register
-        </Button>
+
+        <Form.Group className="mb-3 p-2" controlId="formBasicPassword">
+          <Form.Label>Phone</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="phone"
+            // value={password}
+            name="phone"
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 p-2" controlId="formBasicPassword">
+          <Form.Label>Address</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="address"
+            // value={password}
+            name="address"
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <div className="d-flex justify-content-center">
+
+          <Button className="m-2 rounded" variant="primary" type="submit">
+            Register
+          </Button>
+        </div>
       </Form>
     </Modal>
   );

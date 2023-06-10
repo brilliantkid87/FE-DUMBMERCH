@@ -4,7 +4,8 @@ export const UserContext = createContext()
 
 const initialState = {
     isLogin: false,
-    user: {},
+    role: "",
+    user: {}
 }
 
 const reducer = (state, action) => {
@@ -16,6 +17,7 @@ const reducer = (state, action) => {
           localStorage.setItem('token', payload.token);
           return {
             isLogin: true,
+            role: payload.role,
             user: payload,
           };
         case 'AUTH_ERROR':
@@ -29,6 +31,8 @@ const reducer = (state, action) => {
           throw new Error();
       }   
 };
+
+export const userContext = createContext()
 
 export const UserContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)

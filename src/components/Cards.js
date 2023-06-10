@@ -7,16 +7,24 @@ import Container from 'react-bootstrap/Container';
 function CardComponents() {
   return (
     <Container>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '100px', zIndex: "1"}}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '100px',
+          zIndex: "1",
+          flexWrap: 'wrap',
+        }}
+      >
         {cardData.map((card, index) => (
           <Card
             className='me-3 shadow p-3 mb-5 bg-white rounded'
-            style={{ width: '15rem' }}
+            style={{ width: '15rem', top: '-50px', marginBottom: '20px' }}
             key={index}
           >
             <Image
               className='m-auto'
-              style={{ width: '100%', maxWidth: '250px' }}
+              style={{ width: '70px', height: '70px' }}
               variant='top'
               src={card.image}
             />

@@ -1,38 +1,30 @@
-import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
-function PrivateRoute({ isAdmin, isUser }) {
-  const location = useLocation();
+export function PrivateRouteLogin() {
+    const [state] = useContext(UserContext);
 
-  if (isAdmin && !isUser) {
-    // Render routes for admin
-    const allowedPaths = [
-      "/homeadmin",
-      "/AddTripAdmin",
-      "/ModalApprove",
-    ];
-
-    if (allowedPaths.includes(location.pathname)) {
-      return <Outlet />;
+    if (!state.isLogin) {
+        return <Navigate to="/" />
     }
-  } else if (isUser && !isAdmin) {
-    // Render routes for user
-    const allowedPaths = [
-      "/",
-      "/ProfilePages/:id/:quantity",
-      "/DetailTourPage/:id",
-      "/DetailTourPage",
-      "/PaymentCardWaitingApprove/:id/:quantity",
-      "/WaitingPayment/:id/:quantity",
-    ];
-
-    if (allowedPaths.includes(location.pathname)) {
-      return <Outlet />;
-    }
-  }
-
-  // Redirect to a fallback route if the user is not authorized
-  return <Navigate to="/" />;
+    return <Outlet />
 }
 
-export default PrivateRoute;
+export function PrivateRouteUser() {
+    const [state] = useContext(UserContext);
 
+    if (state.user.role === "admin") {
+        return <Navigate to="/homeadmin" />
+    }
+    return <Outlet />
+}
+
+export function PrivateRouteAdmin() {
+    const [state] = useContext(UserContext);
+
+    if (state.user.role !== "admin") {
+        return <Navigate to="/" />
+    }
+    return <Outlet />
+}
