@@ -120,7 +120,7 @@ function CarouselImg() {
           alert("you closed the popup without finishing the payment");
         },
       });
-      navigate('/ProfilePages');
+      // navigate('/ProfilePages');
     } catch (error) {
       console.log("transaction failed : ", error);
     }
